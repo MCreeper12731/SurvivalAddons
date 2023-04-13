@@ -1,6 +1,6 @@
-package com.github.mcreeper12731.baseplugin.managers;
+package com.github.mcreeper12731.survivaladdons.managers;
 
-import com.github.mcreeper12731.baseplugin.Main;
+import com.github.mcreeper12731.survivaladdons.Main;
 import com.samjakob.spigui.SpiGUI;
 
 public class GuiManager {

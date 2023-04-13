@@ -1,6 +1,6 @@
-package com.github.mcreeper12731.baseplugin;
+package com.github.mcreeper12731.survivaladdons;
 
-import com.github.mcreeper12731.baseplugin.managers.GuiManager;
+import com.github.mcreeper12731.survivaladdons.managers.GuiManager;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIConfig;
 import org.bukkit.plugin.java.JavaPlugin;
