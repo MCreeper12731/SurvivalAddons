@@ -55,8 +55,6 @@ public class HorseRideListener implements Listener {
 
         horse.setVelocity(velocity);
 
-        //horse.setVelocity(horse.getVelocity().multiply(1.1));
-
     }
 
     private double modify(double num, double speed) {

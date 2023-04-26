@@ -27,16 +27,18 @@ public class LadderPlaceListener implements Listener {
         ItemStack item = event.getItem();
         if (item == null || item.getType() != Material.LADDER) return;
 
-        event.setCancelled(true);
-
         //Find the lowest block under the ladder
 
         Location temp = clickedBlock.getLocation().clone();
-        while (temp.getBlock().getType() == Material.LADDER)
+        while (temp.getBlock().getType() == Material.LADDER) {
             temp.add(0, -1, 0);
+        }
 
         //If it's not air return
-        if (temp.getBlock().getType() != Material.AIR) return;
+        if (temp.getBlock().getType() != Material.AIR && temp.getBlock().getType() != Material.CAVE_AIR && temp.getBlock().getType() != Material.VOID_AIR) return;
+
+        event.setCancelled(true);
+
 
         Player player = event.getPlayer();
         BlockFace rotation = ((Directional) clickedBlock.getBlockData()).getFacing();

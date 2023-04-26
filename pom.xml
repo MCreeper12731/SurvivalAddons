@@ -93,7 +93,7 @@
         <dependency>
             <groupId>com.github.SamJakob</groupId>
             <artifactId>SpiGUI</artifactId>
-            <version>1.2.3</version>
+            <version>9b244e8f58</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -103,7 +103,7 @@
         <dependency>
             <groupId>com.github.MCreeper12731</groupId>
             <artifactId>creeper-items</artifactId>
-            <version>8dd145e47f</version>
+            <version>d774544352</version>
         </dependency>
     </dependencies>
 </project>

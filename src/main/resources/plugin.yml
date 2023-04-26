@@ -1,4 +1,4 @@
-name: BasePlugin
+name: SurvivalAddons
 version: '${project.version}'
 main: com.github.mcreeper12731.survivaladdons.Main
 api-version: 1.19
