@@ -26,7 +26,8 @@ public class GuiManager {
 
         for (int i = 0; i < craftingInventory.getPageSize(); i++) craftingInventory.setButton(i, Buttons.getVoidButton(Material.GRAY_STAINED_GLASS_PANE));
 
-        craftingInventory.setButton(Constants.CRAFTING_RESULT, new SGButton(new ItemStack(Material.AIR)).withListener(listener -> {}));
+        craftingInventory.setButton(Constants.CRAFTING_RESULT, new SGButton(new ItemStack(Material.WHITE_STAINED_GLASS_PANE)).withListener(listener -> {}));
+
         for (int emptySlot : Constants.CRAFTING_GRID) {
             craftingInventory.setButton(emptySlot, new SGButton(new ItemStack(Material.AIR)).withListener(listener -> {}));
         }

@@ -103,7 +103,7 @@
         <dependency>
             <groupId>com.github.MCreeper12731</groupId>
             <artifactId>creeper-items</artifactId>
-            <version>d774544352</version>
+            <version>cfce1623e8</version>
         </dependency>
     </dependencies>
 </project>

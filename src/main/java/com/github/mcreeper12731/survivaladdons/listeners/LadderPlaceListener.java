@@ -50,7 +50,7 @@ public class LadderPlaceListener implements Listener {
         //Eye candy
         player.swingMainHand();
         for (Player playSoundPlayer : Bukkit.getOnlinePlayers()) {
-            playSoundPlayer.playSound(playSoundPlayer.getLocation(), Sound.BLOCK_LADDER_PLACE, 0.8f, 0.8f);
+            playSoundPlayer.playSound(player.getLocation(), Sound.BLOCK_LADDER_PLACE, 0.8f, 0.8f);
         }
 
         temp.getBlock().setType(Material.LADDER);

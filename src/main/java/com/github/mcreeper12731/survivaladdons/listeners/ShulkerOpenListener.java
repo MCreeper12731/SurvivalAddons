@@ -4,10 +4,13 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.ShulkerBox;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -41,6 +44,24 @@ public class ShulkerOpenListener implements Listener {
     }
 
     @EventHandler
+    public void onShulkerClick(InventoryClickEvent event) {
+        if (event.getAction() != InventoryAction.PICKUP_HALF) return;
+        ItemStack item = event.getCurrentItem();
+        if (item == null || !isShulkerBox(item.getType())) return;
+
+        event.setCancelled(true);
+
+        ShulkerBox shulkerBox = convertToShulker(item);
+
+        if (!(event.getWhoClicked() instanceof Player player)) return;
+        player.setItemOnCursor(new ItemStack(Material.AIR));
+
+        openShulkerBoxes.put(player.getUniqueId(), item);
+        player.openInventory(shulkerBox.getInventory());
+        player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, 0.5f, 0.8f);
+    }
+
+    @EventHandler
     public void onShulkerClose(InventoryCloseEvent event) {
 
         if (!(event.getPlayer() instanceof Player player)) return;
@@ -62,7 +83,7 @@ public class ShulkerOpenListener implements Listener {
 
         for (int i = 0; i < 27; i++) {
             ItemStack item = closedInventory.getItem(i);
-            if (item == null || item.getType() == Material.AIR) continue;
+            if (item == null) item = new ItemStack(Material.AIR);
             shulkerInventory.setItem(i, item);
         }
 

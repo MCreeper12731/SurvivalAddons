@@ -1,5 +1,6 @@
 package com.github.mcreeper12731.survivaladdons.listeners;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
@@ -7,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import org.spigotmc.event.entity.EntityMountEvent;
 
@@ -15,7 +18,13 @@ import java.util.UUID;
 
 public class HorseRideListener implements Listener {
 
-    private final HashMap<UUID, Entity> riddenHorses = new HashMap<>();
+    private final NamespacedKey mobsKey;
+
+    public HorseRideListener(NamespacedKey mobsKey) {
+        this.mobsKey = mobsKey;
+    }
+
+    private final HashMap<UUID, Horse> riddenHorses = new HashMap<>();
 
     @EventHandler
     public void onHorseRide(EntityMountEvent event) {
@@ -23,7 +32,14 @@ public class HorseRideListener implements Listener {
         if (!(event.getEntity() instanceof Player player)) return;
         if (event.getMount().getType() != EntityType.HORSE) return;
 
-        Entity horse = event.getMount();
+        riddenHorses.remove(player.getUniqueId());
+
+        Horse horse = (Horse) event.getMount();
+
+        PersistentDataContainer pdc = horse.getPersistentDataContainer();
+        String value = pdc.get(mobsKey, PersistentDataType.STRING);
+
+        if (value == null || !value.equals("pegasus")) return;
 
         horse.setGravity(false);
         horse.setInvulnerable(true);
@@ -43,7 +59,7 @@ public class HorseRideListener implements Listener {
         if (player.getVehicle() == null || player.getVehicle().getType() != EntityType.HORSE) return;
 
         Vector velocity = player.getVelocity().setY(0);
-        Entity horse = riddenHorses.get(player.getUniqueId());
+        Horse horse = riddenHorses.get(player.getUniqueId());
 
         if (!velocity.isZero())
             velocity.normalize();

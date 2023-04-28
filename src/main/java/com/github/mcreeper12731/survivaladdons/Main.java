@@ -1,19 +1,20 @@
 package com.github.mcreeper12731.survivaladdons;
 
+import com.github.MCreeper12731.CItem;
 import com.github.MCreeper12731.CreeperItems;
 import com.github.mcreeper12731.survivaladdons.guis.AdvancedCraftingGui;
-import com.github.mcreeper12731.survivaladdons.listeners.HorseRideListener;
-import com.github.mcreeper12731.survivaladdons.listeners.LadderPlaceListener;
-import com.github.mcreeper12731.survivaladdons.listeners.ShulkerOpenListener;
-import com.github.mcreeper12731.survivaladdons.listeners.Testing;
+import com.github.mcreeper12731.survivaladdons.listeners.*;
 import com.github.mcreeper12731.survivaladdons.managers.GuiManager;
 import com.github.mcreeper12731.survivaladdons.managers.ItemsManager;
 import com.github.mcreeper12731.survivaladdons.multiblocks.AdvancedCraftingTable;
 import com.github.mcreeper12731.survivaladdons.multiblocks.MagicAltar;
+import com.github.mcreeper12731.survivaladdons.util.Color;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandAPIConfig;
+import dev.jorel.commandapi.arguments.StringArgument;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -24,6 +25,7 @@ import java.util.Arrays;
 public final class Main extends JavaPlugin {
 
     private GuiManager guiManager;
+    private CreeperItems creeperItems;
     @Override
     public void onLoad() {
         CommandAPI.onLoad(new CommandAPIConfig());
@@ -34,18 +36,20 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         CommandAPI.onEnable(this);
 
-        CreeperItems creeperItems = new CreeperItems(this, "survival_addons");
+        NamespacedKey mobsKey = new NamespacedKey(this, "mobs");
+
+        creeperItems = new CreeperItems(this, "survival_addons");
         guiManager = new GuiManager(this);
-        ItemsManager itemsManager = new ItemsManager(this, creeperItems);
+        ItemsManager itemsManager = new ItemsManager(creeperItems, mobsKey);
 
         registerListeners(
                 new MagicAltar(this),
                 new LadderPlaceListener(),
                 new ShulkerOpenListener(),
-                new HorseRideListener(),
+                new HorseRideListener(mobsKey),
                 new AdvancedCraftingGui(this, creeperItems, itemsManager),
                 new AdvancedCraftingTable(guiManager),
-                new Testing());
+                new PlayerJoinListener());
     }
 
     private void registerListeners(Listener... listeners) {
@@ -55,7 +59,24 @@ public final class Main extends JavaPlugin {
 
     private void registerCommands() {
 
+        new CommandAPICommand("getitem")
+                .withPermission("survivaladdons.getitem")
+                .withArguments(new StringArgument("Item ID"))
+                .executes((sender, args) -> {
+                    if (!(sender instanceof Player player)) {
+                        sender.sendMessage("&cOnly players can run this command!");
+                        return;
+                    }
 
+                    CItem citem = creeperItems.getItem((String) args[0]);
+                    if (citem == null) {
+                        player.sendMessage(Color.color("&cItem does not exist!"));
+                        return;
+                    }
+
+                    player.getInventory().addItem(citem.getItem());
+                })
+                .register();
 
     }
 }
