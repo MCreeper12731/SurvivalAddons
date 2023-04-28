@@ -30,11 +30,10 @@ public class LumberAxeListener implements CItemMineListener {
 
         while (!blocksToBreak.isEmpty()) {
 
-            meta.setDamage(meta.getDamage() + 1);
 
             Block currBlock = blocksToBreak.poll();
             Location blockLocation = currBlock.getLocation().clone().add(0, 1, 0);
-            currBlock.breakNaturally(item);
+            if (currBlock.breakNaturally(item)) meta.setDamage(meta.getDamage() + 1);
 
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
