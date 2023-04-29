@@ -18,12 +18,6 @@ public class HammerListener implements CItemMineListener {
         Vector direction = player.getEyeLocation().getDirection();
         Location minedLocation = event.getBlock().getLocation().clone();
 
-        Damageable damageable = (Damageable) item.getItemMeta();
-
-        damageable.setDamage(damageable.getDamage() + 9);
-
-        item.setItemMeta(damageable);
-
         //Mine blocks based on player direction
         if (direction.getY() > 0.71 || direction.getY() < -0.71) {
             for (int i = -1; i < 2; i++) {

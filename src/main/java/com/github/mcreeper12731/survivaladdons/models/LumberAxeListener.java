@@ -23,28 +23,23 @@ public class LumberAxeListener implements CItemMineListener {
 
         ItemStack item = player.getInventory().getItemInMainHand();
 
-        Damageable meta = (Damageable) item.getItemMeta();
-
-        Queue<Block> blocksToBreak = new PriorityQueue<>(Comparator.comparing(b -> b.getLocation().toString()));
-        blocksToBreak.add(event.getBlock());
+        Queue<Location> blocksToBreak = new PriorityQueue<>(Comparator.comparing(Location::toString));
+        blocksToBreak.add(event.getBlock().getLocation());
 
         while (!blocksToBreak.isEmpty()) {
 
-
-            Block currBlock = blocksToBreak.poll();
-            Location blockLocation = currBlock.getLocation().clone().add(0, 1, 0);
-            if (currBlock.breakNaturally(item)) meta.setDamage(meta.getDamage() + 1);
+            Location currLocation = blocksToBreak.poll();
+            currLocation.getBlock().breakNaturally(item);
 
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
-                    Location currLocation = blockLocation.clone().add(i, 0, j);
-                    if (currLocation.getBlock().getType().name().contains("LOG")) blocksToBreak.add(currLocation.getBlock());
+                    Location neighborLocation = currLocation.clone().add(i, 1, j);
+                    if (blocksToBreak.contains(neighborLocation)) continue;
+                    if (neighborLocation.getBlock().getType().name().contains("LOG")) blocksToBreak.add(neighborLocation);
                 }
             }
 
         }
-
-        item.setItemMeta(meta);
 
     }
 }
